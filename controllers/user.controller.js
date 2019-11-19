@@ -15,7 +15,8 @@ exports.login = (req, res) => {
             });            
         }
         if (username && password) {
-            if (username === mockedUsername && password === mockedPassword) {
+            console.log(user);
+            if (username === user.username && password === user.password) {
                 let token = jwt.sign({_id: user._id,username: username},
                     config.secret,
                     { 
@@ -23,24 +24,25 @@ exports.login = (req, res) => {
                     }
                 );
                 // return the JWT token for the future API calls
-                res.json({
+               return res.json({
                     success: true,
                     message: 'Authentication successful!',
                     token: token
                 });
             } else {
-                res.send(403).json({
+                return res.status(403).send({
                     success: false,
                     message: 'Incorrect username or password'
                 });
             }
         } else {
-            res.send(400).json({
+            return res.send(400).json({
                 success: false,
                 message: 'Authentication failed! Please check the request'
             });
         }
-    }).catch(err => {
+    })
+    .catch(err => {
         if(err.kind === 'ObjectId') {
             return res.status(404).send({
                 message: "User not found with id " + req.params.userId
