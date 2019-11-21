@@ -11,11 +11,12 @@ exports.login = (req, res) => {
     .then(user => {
         if(!user) {
             return res.status(404).send({
+                success:false,
                 message: "Username not found"
             });            
         }
         if (username && password) {
-            console.log(user);
+//            console.log(user);
             if (username === user.username && password === user.password) {
                 let token = jwt.sign({_id: user._id,username: username},
                     config.secret,
@@ -27,7 +28,8 @@ exports.login = (req, res) => {
                return res.json({
                     success: true,
                     message: 'Authentication successful!',
-                    token: token
+                    token: token,
+                    user_id:user._id
                 });
             } else {
                 return res.status(403).send({
@@ -45,10 +47,12 @@ exports.login = (req, res) => {
     .catch(err => {
         if(err.kind === 'ObjectId') {
             return res.status(404).send({
+                success:false,
                 message: "User not found with id " + req.params.userId
             });                
         }
         return res.status(500).send({
+            success:false,
             message: "Error retrieving user with id " + req.params.userId
         });
     });

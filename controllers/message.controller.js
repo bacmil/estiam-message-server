@@ -104,3 +104,33 @@ exports.delete = (req, res) => {
         });
     });
 };
+//check if a function exits in an array
+const exitsInArray=(array,elt)=>{
+    
+    for(let i=0;i<array.length;i++){
+        if(elt==array[i]){ 
+            return true;
+        }
+    }
+    return false;
+}
+
+exports.channels = (req,res)=>{
+    let channels=[];
+    Message.find({},(err,messages)=>{
+       // console.log(messages);
+        messages.forEach(message=>{
+            
+            if(!exitsInArray(channels,message.channel)){
+                console.log(channels);
+                channels.push(message.channel);
+            }
+        })
+        return res.send(JSON.stringify(channels));
+    });
+    //console.log(result);
+    //console.log(channels);
+
+    //return res.send(JSON.stringify(channels));
+}
+

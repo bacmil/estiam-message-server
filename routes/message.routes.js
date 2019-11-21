@@ -14,4 +14,7 @@ module.exports = (app) => {
 
     // Delete a Message with messageId
     app.delete('/messages/:messageId', middleware.checkToken, messages.delete);
+
+    // Get channel list
+    app.get('/channels',middleware.checkToken,messages.channels);
 }
